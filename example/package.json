@@ -1,0 +1,15 @@
+{
+  "name": "jupyter-widget-ws-example",
+  "version": "0.1.0",
+  "author": "Colin Gilgenbach <colin@gilgenbach.net>",
+  "type": "module",
+  "scripts": {
+    "build": "rollup --config rollup.config.mjs",
+    "watch": "rollup --config rollup.config.mjs --watch"
+  },
+  "devDependencies": {
+    "@anywidget/types": "0.4.0",
+    "rollup": "^4.62.2",
+    "rollup-plugin-esbuild": "^6.2.1"
+  }
+}

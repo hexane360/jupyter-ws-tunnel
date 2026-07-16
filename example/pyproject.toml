@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=51.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jupyter-widget-ws-example"
+version = "0.1"
+authors = [
+  {name = "Colin Gilgenbach", email = "hexane@mit.edu"}
+]
+
+requires-python = ">=3.10"
+dependencies = [
+    "click~=8.1.0",
+    "Quart>=0.20.0",
+    "backoff==2.2.1",
+    "requests>=2.31.0",
+]
+
+[project.scripts]
+jupyter-widget-ws-example = "jupyter_widget_ws_example.main:main"
