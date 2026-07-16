@@ -19,3 +19,10 @@ dependencies = [
 
 [project.scripts]
 jupyter-widget-ws-example = "jupyter_widget_ws_example.main:main"
+
+[tool.setuptools.packages.find]
+include = ["jupyter_widget_ws_example"]
+
+[tool.setuptools.package-data]
+"jupyter_widget_ws_example.static" = ["*"]
+"jupyter_widget_ws_example.templates" = ["*"]

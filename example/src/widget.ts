@@ -1,4 +1,5 @@
-import { RenderProps } from "@anywidget/types";
+import { RenderProps, InitializeProps } from "@anywidget/types";
+import Log from "./Log";
 
 let log_messages: string = "Log:";
 
@@ -9,4 +10,8 @@ function render({ model, el }: RenderProps) {
     el.appendChild(text);
 }
 
-export default { render };
+function initialize({ model, signal }: InitializeProps) {
+    // TODO set up websocket
+}
+
+export default { initialize, render };

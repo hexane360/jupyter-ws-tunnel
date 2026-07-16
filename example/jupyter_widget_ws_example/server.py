@@ -4,11 +4,14 @@ import os
 import typing as t
 
 import asyncio
-from quart import Quart, request, websocket
+from quart import Quart, request, websocket, render_template
 
 
 app = Quart(__name__)
 
+@app.route("/")
+async def index():
+    return await render_template('index.html')
 
 @app.websocket("/ws1")
 async def websocket1():

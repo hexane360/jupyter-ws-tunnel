@@ -9,9 +9,12 @@ const plugins = [
 ];
 
 export default {
-    input: 'src/index.ts',
+    input: [
+        'src/main.ts',
+        'src/widget.ts',
+    ],
     output: {
-        dir: 'jupyter_widget_ws_example',
+        dir: 'jupyter_widget_ws_example/static',
         format: 'esm',
         sourcemap: true,
         plugins: [],
