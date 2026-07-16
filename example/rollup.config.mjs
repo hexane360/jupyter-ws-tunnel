@@ -8,16 +8,13 @@ const plugins = [
     }),
 ];
 
-export default {
-    input: [
-        'src/main.ts',
-        'src/widget.ts',
-    ],
-    output: {
-        dir: 'jupyter_widget_ws_example/static',
-        format: 'esm',
-        sourcemap: true,
-        plugins: [],
-    },
-    plugins,
+const output = {
+    dir: 'jupyter_widget_ws_example/static',
+    format: 'esm',
+    sourcemap: true,
 };
+
+export default [
+    { input: 'src/main.ts', output, plugins },
+    { input: 'src/widget.ts', output, plugins },
+];

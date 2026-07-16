@@ -1,17 +1,39 @@
 import { RenderProps, InitializeProps } from "@anywidget/types";
 import Log from "./Log";
+import { createSocket, SocketLike } from "./socket";
 
-let log_messages: string = "Log:";
+let log: Log | undefined;
 
-function render({ model, el }: RenderProps) {
-    let text = document.createElement("div");
-    text.className = "ws-log";
-    text.innerHTML = log_messages;
-    el.appendChild(text);
+function render({ el }: RenderProps) {
+    const elem = document.createElement("div");
+    elem.id = "ws-log";
+    elem.className = "ws-log";
+    log!.setElem(elem);
+    el.appendChild(elem);
 }
 
 function initialize({ model, signal }: InitializeProps) {
-    // TODO set up websocket
+    log = new Log();
+
+    // Passing `model` yields a comm-backed socket; the same calls would drive a
+    // real WebSocket if `model` were omitted (see main.ts).
+    const socket = createSocket("/ws1", model);
+    wireUp(socket, log);
+
+    // Tear the socket down when anywidget disposes the view.
+    signal.addEventListener("abort", () => socket.close());
+}
+
+function wireUp(socket: SocketLike, log: Log) {
+    socket.onopen = () => log.log("connected");
+    socket.onclose = () => log.log("closed");
+    socket.onerror = () => log.log("error");
+    socket.onmessage = (event) => {
+        const data = typeof event.data === "string" ? event.data : "[binary]";
+        log.log(`recv: ${data}`);
+        // Reply so the server's receive_json()/ping loop keeps flowing.
+        socket.send(JSON.stringify({ msg: "pong" }));
+    };
 }
 
 export default { initialize, render };

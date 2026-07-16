@@ -1,4 +1,2 @@
-class s{messages=`Log:
-`;elem=null;constructor(e=null){this.setElem(e)}setElem(e){this.elem=e,this.elem&&(this.elem.innerHTML=this.messages)}log(e){this.messages+=e+`
-`,this.elem&&(this.elem.innerHTML=this.messages)}}new s(document.getElementById("ws-log"));
+class n{messages="Log:<br>";elem=null;constructor(e=null){this.setElem(e)}setElem(e){this.elem=e,this.elem&&(this.elem.innerHTML=this.messages)}log(e){this.messages+=e+"<br>",this.elem&&(this.elem.innerHTML=this.messages)}}function l(s,e){return new WebSocket(s)}const t=new n(document.getElementById("ws-log")),r=location.protocol==="https:"?"wss":"ws",o=l(`${r}://${location.host}/ws1`);o.onopen=()=>t.log("connected"),o.onclose=()=>t.log("closed"),o.onerror=()=>t.log("error"),o.onmessage=s=>{const e=typeof s.data=="string"?s.data:"[binary]";t.log(`recv: ${e}`),o.send(JSON.stringify({msg:"pong"}))};
 //# sourceMappingURL=main.js.map
