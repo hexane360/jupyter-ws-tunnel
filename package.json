@@ -1,19 +1,22 @@
 {
-  "name": "jupyter-widget-ws-example",
+  "name": "jupyter-widget-ws",
   "version": "0.1.0",
   "author": "Colin Gilgenbach <colin@gilgenbach.net>",
   "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "src/index.ts",
+  "workspaces": [
+    "example"
+  ],
   "scripts": {
     "build": "rollup --config rollup.config.mjs",
     "watch": "rollup --config rollup.config.mjs --watch"
   },
-  "dependencies": {
-    "jupyter-widget-ws": "file:.."
-  },
   "devDependencies": {
     "@anywidget/types": "0.4.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
     "rollup": "^4.62.2",
-    "rollup-plugin-esbuild": "^6.2.1"
+    "rollup-plugin-esbuild": "^6.2.1",
+    "typescript": "^7.0.2"
   }
 }

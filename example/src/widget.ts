@@ -1,6 +1,6 @@
 import { RenderProps, InitializeProps } from "@anywidget/types";
 import Log from "./Log";
-import { createSocket, SocketLike } from "./socket";
+import { createSocket, SocketLike } from "jupyter-widget-ws";
 
 let log: Log | undefined;
 

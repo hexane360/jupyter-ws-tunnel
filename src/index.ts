@@ -50,7 +50,7 @@ function isEnvelope(msg: unknown): msg is Envelope {
     );
 }
 
-function toArrayBuffer(data: BufferSource | Blob): ArrayBuffer | Blob {
+function toArrayBuffer(data: BufferSource): ArrayBuffer {
     if (ArrayBuffer.isView(data)) {
         return data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer;
     }
@@ -67,11 +67,6 @@ export class CommWebSocket extends EventTarget implements SocketLike {
     static readonly OPEN = OPEN;
     static readonly CLOSING = CLOSING;
     static readonly CLOSED = CLOSED;
-
-    readonly CONNECTING = CONNECTING;
-    readonly OPEN = OPEN;
-    readonly CLOSING = CLOSING;
-    readonly CLOSED = CLOSED;
 
     readyState: number = CONNECTING;
     onopen: ((ev: Event) => void) | null = null;
@@ -100,6 +95,14 @@ export class CommWebSocket extends EventTarget implements SocketLike {
         }
         if (typeof data === "string") {
             this.emit({ type: "data", id: this.id, encoding: "text", text: data });
+        } else if (data instanceof Blob) {
+            // Blob -> bytes is inherently async (no sync read API), unlike a real
+            // WebSocket where the browser queues the read internally. This can
+            // reorder relative to sends made immediately after — acceptable for
+            // the uncommon Blob case.
+            data.arrayBuffer().then((buffer) =>
+                this.emit({ type: "data", id: this.id, encoding: "binary" }, [buffer]),
+            );
         } else {
             this.emit({ type: "data", id: this.id, encoding: "binary" }, [toArrayBuffer(data)]);
         }
@@ -114,7 +117,7 @@ export class CommWebSocket extends EventTarget implements SocketLike {
         this.fire(new CloseEvent("close", { code, reason, wasClean: true }), this.onclose);
     }
 
-    private emit(envelope: Envelope, buffers?: (ArrayBuffer | Blob)[]): void {
+    private emit(envelope: Envelope, buffers?: ArrayBuffer[]): void {
         this.model.send(envelope, undefined, buffers);
     }
 
