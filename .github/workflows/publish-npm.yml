@@ -1,0 +1,28 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/jupyter-widget-ws
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - run: npm run build
+      # actions/setup-node writes an empty _authToken line whenever
+      # registry-url is set, which makes npm skip OIDC trusted-publishing
+      # auth entirely (actions/setup-node#1551).
+      - run: sed -i '/_authToken/d' ~/.npmrc
+      - run: npm publish

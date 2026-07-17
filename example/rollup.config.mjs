@@ -2,8 +2,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import esbuild from 'rollup-plugin-esbuild';
 
 const plugins = [
-    // Resolves the bare "jupyter-widget-ws" import to the workspace package;
-    // Rollup core only resolves relative/absolute paths on its own.
     nodeResolve(),
     esbuild({
         tsconfig: 'tsconfig.json',

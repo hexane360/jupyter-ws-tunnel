@@ -30,13 +30,7 @@ class _ServerLogHandler(logging.Handler):
 
 
 def run_widget(*, port: int = 5050):
-    """Serve `app` two ways at once from the same kernel: a real HTTP/WebSocket
-    server in the background (reachable from a normal browser tab), and the
-    widget's comm as a fallback transport for environments (e.g. hosted Colab)
-    that can't proxy the real WebSocket. Scheduling `serve_in_background` as a
-    task (rather than `asyncio.run`) lets it coexist with `attach_widget` on
-    the kernel's already-running event loop.
-    """
+    """Serves `app` over both a real HTTP/WebSocket server and the widget's comm."""
     widget = MyWidget()
     output = widgets.Output()
     asyncio.ensure_future(serve_in_background(

@@ -2,6 +2,7 @@
   "name": "jupyter-widget-ws-example",
   "version": "0.1.0",
   "author": "Colin Gilgenbach <colin@gilgenbach.net>",
+  "private": true,
   "type": "module",
   "scripts": {
     "build": "rollup --config rollup.config.mjs",

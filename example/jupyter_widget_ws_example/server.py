@@ -32,12 +32,7 @@ async def serve_in_background(
     serving_cb: t.Optional[t.Callable[[], t.Any]] = None,
     log_handlers: t.Optional[t.Sequence[logging.Handler]] = None,
 ) -> None:
-    """Coroutine that serves `app` via Hypercorn. Named for how it's meant to be
-    used from inside an already-running event loop — e.g. a Jupyter kernel cell,
-    via `asyncio.ensure_future(serve_in_background(...))` — so it can run
-    alongside a comm-attached widget (`comm_bridge.attach_widget`) on the same
-    loop. `run` uses it directly for the blocking standalone-CLI case.
-    """
+    """Serves `app` via Hypercorn on the current event loop."""
     from hypercorn.asyncio import serve
     from hypercorn.config import Config
 
@@ -69,7 +64,6 @@ def run(
     root_path: t.Optional[str] = None,
     serving_cb: t.Optional[t.Callable[[], t.Any]] = None,
 ) -> None:
-    """Blocking entry point for the standalone CLI (`main.py`). Owns its own
-    event loop via `asyncio.run` — cannot be called from inside an
-    already-running loop (e.g. a Jupyter kernel cell)."""
+    """Blocking entry point for the standalone CLI. Cannot be called from an
+    already-running event loop."""
     asyncio.run(serve_in_background(hostname, port, root_path, serving_cb))

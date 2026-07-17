@@ -1,14 +1,9 @@
 import type { AnyModel } from "@anywidget/types";
 
 /**
- * Wire protocol shared with the Python side (`comm_bridge.py`). A small
- * JSON-serializable envelope carried over the widget's model-sync comm
- * (`model.send` / `model.on("msg:custom")`). Binary payloads travel in the
- * comm's separate `buffers` side-channel rather than base64'd into the JSON.
- *
- * `id` is a logical-connection identifier included from day one so the format
- * can grow multiplexing later without breaking; v1 only ever has one live
- * connection per widget instance.
+ * Wire protocol shared with the Python side (`comm_bridge.py`), carried over
+ * the widget's model-sync comm. Binary payloads travel in the comm's
+ * `buffers` side-channel.
  */
 export type Envelope =
     | { type: "open"; id: string; path: string; query?: string }
@@ -22,11 +17,7 @@ const OPEN = 1;
 const CLOSING = 2;
 const CLOSED = 3;
 
-/**
- * The subset of the browser `WebSocket` surface the example relies on. Both the
- * real `WebSocket` and {@link CommWebSocket} satisfy this, so calling code is
- * identical regardless of which transport {@link createSocket} hands back.
- */
+/** Subset of the `WebSocket` API implemented by both a real `WebSocket` and `CommWebSocket`. */
 export interface SocketLike {
     readonly readyState: number;
     onopen: ((ev: Event) => void) | null;
@@ -57,11 +48,7 @@ function toArrayBuffer(data: BufferSource): ArrayBuffer {
     return data.slice(0);
 }
 
-/**
- * A `WebSocket`-shaped adapter backed by a widget's model-sync comm. Used in
- * environments (e.g. hosted Colab) where a real WebSocket cannot be proxied but
- * the widget comm channel is available.
- */
+/** `WebSocket`-shaped adapter backed by a widget's model-sync comm. */
 export class CommWebSocket extends EventTarget implements SocketLike {
     static readonly CONNECTING = CONNECTING;
     static readonly OPEN = OPEN;
@@ -84,8 +71,6 @@ export class CommWebSocket extends EventTarget implements SocketLike {
         this.model = model;
         this.handler = (msg, buffers) => this.onCustomMessage(msg, buffers);
         model.on("msg:custom", this.handler);
-        // No TCP handshake to observe: the server side signals readiness with an
-        // explicit `accept` envelope (see onCustomMessage), mirroring ASGI.
         this.emit({ type: "open", id: this.id, path });
     }
 
@@ -96,10 +81,7 @@ export class CommWebSocket extends EventTarget implements SocketLike {
         if (typeof data === "string") {
             this.emit({ type: "data", id: this.id, encoding: "text", text: data });
         } else if (data instanceof Blob) {
-            // Blob -> bytes is inherently async (no sync read API), unlike a real
-            // WebSocket where the browser queues the read internally. This can
-            // reorder relative to sends made immediately after — acceptable for
-            // the uncommon Blob case.
+            // Async Blob read may reorder relative to synchronous sends made after it.
             data.arrayBuffer().then((buffer) =>
                 this.emit({ type: "data", id: this.id, encoding: "binary" }, [buffer]),
             );
@@ -112,9 +94,7 @@ export class CommWebSocket extends EventTarget implements SocketLike {
         if (this.readyState === CLOSING || this.readyState === CLOSED) return;
         this.readyState = CLOSING;
         this.emit({ type: "close", id: this.id, code, reason });
-        this.teardown();
-        this.readyState = CLOSED;
-        this.fire(new CloseEvent("close", { code, reason, wasClean: true }), this.onclose);
+        this.handleClosed(code, reason);
     }
 
     private emit(envelope: Envelope, buffers?: ArrayBuffer[]): void {
@@ -135,22 +115,22 @@ export class CommWebSocket extends EventTarget implements SocketLike {
                     data = msg.text;
                 } else {
                     const view = buffers[0];
-                    // Don't assume view.buffer is exactly the payload — respect offset/length.
                     data = view.buffer.slice(view.byteOffset, view.byteOffset + view.byteLength);
                 }
                 this.fire(new MessageEvent("message", { data }), this.onmessage);
                 break;
             }
             case "close": {
-                this.teardown();
-                this.readyState = CLOSED;
-                this.fire(
-                    new CloseEvent("close", { code: msg.code, reason: msg.reason, wasClean: true }),
-                    this.onclose,
-                );
+                this.handleClosed(msg.code, msg.reason);
                 break;
             }
         }
+    }
+
+    private handleClosed(code?: number, reason?: string): void {
+        this.teardown();
+        this.readyState = CLOSED;
+        this.fire(new CloseEvent("close", { code, reason, wasClean: true }), this.onclose);
     }
 
     private fire<E extends Event>(event: E, handler: ((ev: E) => void) | null): void {
@@ -168,11 +148,7 @@ export class CommWebSocket extends EventTarget implements SocketLike {
     }
 }
 
-/**
- * Returns a real `WebSocket` when no widget model is present (a plain HTTP
- * page), or a comm-backed {@link CommWebSocket} when a model is supplied (a
- * widget frontend). Calling code is identical for both.
- */
+/** Returns a real `WebSocket` if no model is given, or a comm-backed `CommWebSocket` if one is. */
 export function createSocket(url: string, model?: AnyModel): SocketLike {
     if (model) {
         return new CommWebSocket(url, model);
