@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: npm
-      url: https://www.npmjs.com/package/jupyter-widget-ws
+      url: https://www.npmjs.com/package/jupyter-ws-tunnel
     permissions:
       id-token: write
     steps:

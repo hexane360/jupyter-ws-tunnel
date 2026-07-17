@@ -1,5 +1,5 @@
 {
-  "name": "jupyter-widget-ws",
+  "name": "jupyter-ws-tunnel",
   "version": "0.1.0",
   "author": "Colin Gilgenbach <colin@gilgenbach.net>",
   "type": "module",

@@ -3,7 +3,7 @@
     "src/**/*.ts",
     "src/**/*.tsx"
   ],
-  "exclude": ["./jupyter_widget_ws_example"],
+  "exclude": ["./jupyter_ws_tunnel_example"],
   "compilerOptions": {
       "rootDir": "src",
       "target": "esnext",

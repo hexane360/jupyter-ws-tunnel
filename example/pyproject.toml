@@ -3,7 +3,7 @@ requires = ["setuptools>=51.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "jupyter-widget-ws-example"
+name = "jupyter-ws-tunnel-example"
 version = "0.1"
 authors = [
   {name = "Colin Gilgenbach", email = "hexane@mit.edu"}
@@ -11,7 +11,7 @@ authors = [
 
 requires-python = ">=3.10"
 dependencies = [
-    "jupyter-widget-ws",
+    "jupyter-ws-tunnel",
     "anywidget>=0.9",
     "click~=8.1.0",
     "Quart>=0.20.0",
@@ -21,11 +21,11 @@ dependencies = [
 ]
 
 [project.scripts]
-jupyter-widget-ws-example = "jupyter_widget_ws_example.main:main"
+jupyter-ws-tunnel-example = "jupyter_ws_tunnel_example.main:main"
 
 [tool.setuptools.packages.find]
-include = ["jupyter_widget_ws_example"]
+include = ["jupyter_ws_tunnel_example"]
 
 [tool.setuptools.package-data]
-"jupyter_widget_ws_example.static" = ["*"]
-"jupyter_widget_ws_example.templates" = ["*"]
+"jupyter_ws_tunnel_example.static" = ["*"]
+"jupyter_ws_tunnel_example.templates" = ["*"]

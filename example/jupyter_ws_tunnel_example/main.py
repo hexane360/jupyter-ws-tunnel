@@ -9,7 +9,7 @@ import click
 @click.option('--host', type=str, default='localhost', help="Host to serve on")
 @click.option('--port', type=int, help="Port to serve on")
 def main(host: str, port: t.Optional[int]):
-    from jupyter_widget_ws_example.server import run
+    from jupyter_ws_tunnel_example.server import run
 
     if ':' in host:
         (host, port_from_host) = host.rsplit(':', maxsplit=1)

@@ -1,5 +1,5 @@
 import Log from "./Log";
-import { createSocket } from "jupyter-widget-ws";
+import { createSocket } from "jupyter-ws-tunnel";
 
 const log = new Log(document.getElementById("ws-log"));
 

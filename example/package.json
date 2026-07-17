@@ -1,5 +1,5 @@
 {
-  "name": "jupyter-widget-ws-example",
+  "name": "jupyter-ws-tunnel-example",
   "version": "0.1.0",
   "author": "Colin Gilgenbach <colin@gilgenbach.net>",
   "private": true,
@@ -9,7 +9,7 @@
     "watch": "rollup --config rollup.config.mjs --watch"
   },
   "dependencies": {
-    "jupyter-widget-ws": "file:.."
+    "jupyter-ws-tunnel": "file:.."
   },
   "devDependencies": {
     "@anywidget/types": "0.4.0",

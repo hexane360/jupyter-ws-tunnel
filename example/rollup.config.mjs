@@ -11,7 +11,7 @@ const plugins = [
 ];
 
 const output = {
-    dir: 'jupyter_widget_ws_example/static',
+    dir: 'jupyter_ws_tunnel_example/static',
     format: 'esm',
     sourcemap: true,
 };

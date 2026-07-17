@@ -7,7 +7,7 @@ import ipywidgets as widgets
 from IPython.display import display
 
 from .server import app, serve_in_background
-from jupyter_widget_ws import attach_widget
+from jupyter_ws_tunnel import attach_widget
 
 bundler_output_dir = Path(__file__).parent / "static"
 

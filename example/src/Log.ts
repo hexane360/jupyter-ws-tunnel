@@ -1,4 +1,4 @@
-import type { SocketLike } from "jupyter-widget-ws";
+import type { SocketLike } from "jupyter-ws-tunnel";
 
 export default class Log {
     messages: string = "Log:<br>";

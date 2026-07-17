@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/project/jupyter-widget-ws/
+      url: https://pypi.org/project/jupyter-ws-tunnel/
     permissions:
       id-token: write
     steps:
