@@ -2,6 +2,7 @@
   "name": "jupyter-ws-tunnel",
   "version": "0.1.0",
   "author": "Colin Gilgenbach <colin@gilgenbach.net>",
+  "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

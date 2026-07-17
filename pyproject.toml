@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=51.0", "wheel"]
+requires = ["setuptools>=77.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,6 +8,8 @@ version = "0.1.0"
 authors = [
   {name = "Colin Gilgenbach", email = "hexane@mit.edu"}
 ]
+license = "MIT"
+license-files = ["LICENSE"]
 
 requires-python = ">=3.10"
 dependencies = [
