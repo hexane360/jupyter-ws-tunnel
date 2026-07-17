@@ -4,17 +4,37 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jupyter-ws-tunnel"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   {name = "Colin Gilgenbach", email = "hexane@mit.edu"}
 ]
 license = "MIT"
 license-files = ["LICENSE"]
+readme = "README.md"
+keywords = ["jupyter", "websocket", "asgi", "colab", "anywidget", "ipywidgets", "comm"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Framework :: Jupyter",
+    "Framework :: AsyncIO",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
 
 requires-python = ">=3.10"
 dependencies = [
     "hypercorn>=0.17.0",
 ]
+
+[project.urls]
+Repository = "https://github.com/hexane360/jupyter-ws-tunnel"
+Issues = "https://github.com/hexane360/jupyter-ws-tunnel/issues"
 
 [tool.setuptools.packages.find]
 include = ["jupyter_ws_tunnel"]
