@@ -3,6 +3,10 @@
   "version": "0.1.2",
   "author": "Colin Gilgenbach <colin@gilgenbach.net>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hexane360/jupyter-ws-tunnel"
+  },
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
