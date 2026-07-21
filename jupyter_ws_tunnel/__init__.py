@@ -1,5 +1,5 @@
-from .comm_bridge import CommWebsocketConnection, attach_widget
+from .comm_bridge import CommHttpRequest, CommWebsocketConnection, attach_widget
 
 __all__ = [
-    "CommWebsocketConnection", "attach_widget"
+    "CommHttpRequest", "CommWebsocketConnection", "attach_widget"
 ]

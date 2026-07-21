@@ -10,7 +10,9 @@ export type Envelope =
     | { type: "accept"; id: string }
     | { type: "data"; id: string; encoding: "text"; text: string }
     | { type: "data"; id: string; encoding: "binary" }
-    | { type: "close"; id: string; code?: number; reason?: string };
+    | { type: "close"; id: string; code?: number; reason?: string }
+    | { type: "http-request"; id: string; method: string; path: string; query?: string; headers: [string, string][]; body?: string | null }
+    | { type: "http-response"; id: string; status: number; headers: [string, string][]; body?: string | null };
 
 const CONNECTING = 0;
 const OPEN = 1;
@@ -18,7 +20,7 @@ const CLOSING = 2;
 const CLOSED = 3;
 
 /** Subset of the `WebSocket` API implemented by both a real `WebSocket` and `CommWebSocket`. */
-export interface SocketLike {
+export interface SocketLike extends EventTarget {
     readonly readyState: number;
     onopen: ((ev: Event) => void) | null;
     onmessage: ((ev: MessageEvent) => void) | null;
@@ -28,11 +30,11 @@ export interface SocketLike {
     close(code?: number, reason?: string): void;
 }
 
-function genId(): string {
+export function genId(): string {
     return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
 }
 
-function isEnvelope(msg: unknown): msg is Envelope {
+export function isEnvelope(msg: unknown): msg is Envelope {
     return (
         typeof msg === "object" &&
         msg !== null &&
@@ -61,7 +63,7 @@ export class CommWebSocket extends EventTarget implements SocketLike {
     onclose: ((ev: CloseEvent) => void) | null = null;
     onerror: ((ev: Event) => void) | null = null;
 
-    private readonly model: AnyModel;
+    readonly model: AnyModel;
     private readonly id: string = genId();
     private readonly handler: (msg: unknown, buffers: DataView[]) => void;
     private torn = false;
@@ -149,9 +151,11 @@ export class CommWebSocket extends EventTarget implements SocketLike {
 }
 
 /** Returns a real `WebSocket` if no model is given, or a comm-backed `CommWebSocket` if one is. */
-export function createSocket(url: string, model?: AnyModel): SocketLike {
+export function createSocket(url: string, model?: AnyModel): CommWebSocket | WebSocket {
     if (model) {
         return new CommWebSocket(url, model);
     }
     return new WebSocket(url);
 }
+
+export { tunnelFetch } from "./fetch";

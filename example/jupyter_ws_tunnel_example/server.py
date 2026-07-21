@@ -14,6 +14,10 @@ app = Quart(__name__)
 async def index() -> str:
     return await render_template('index.html')
 
+@app.route("/api/echo", methods=["POST"])
+async def echo() -> dict:
+    return {"echo": await request.get_json()}
+
 @app.websocket("/ws1")
 async def websocket1() -> None:
     await websocket.accept()
