@@ -1,6 +1,6 @@
 {
   "name": "jupyter-ws-tunnel-example",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Colin Gilgenbach <colin@gilgenbach.net>",
   "private": true,
   "type": "module",
